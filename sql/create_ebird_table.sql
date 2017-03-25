@@ -47,3 +47,26 @@ CREATE TABLE ebd.eBird (
     SPECIES_COMMENTS            text,
     X                           text
 );
+
+-- Create Indexes
+----
+CREATE INDEX ebird_common_name_gix ON "ebd"."ebird" USING BTREE (common_name);
+CREATE INDEX ebird_geom_gix ON "ebd"."ebird" USING GIST (geom);
+
+-- Get the Spatial Data Ready
+-------------------------------
+--Add the geom field for holding spatial data
+ALTER TABLE "ebd"."ebird" ADD COLUMN geom geometry(Geometry,4326);
+
+--Add the spatial dat to the new column
+UPDATE "ebd"."ebird"
+set geom = ST_SetSRID(ST_MakePoint(longitude,latitude),4326);
+WHERE geom IS NULL;
+
+-- Create Index on the geom field
+CREATE INDEX ebird_geom_gix ON "ebd"."ebird" USING GIST (geom);
+
+-- Cleanup and optimize the data
+VACUUM ANALYZE "ebd"."ebird";
+
+
