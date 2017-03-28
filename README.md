@@ -7,3 +7,7 @@ To edit diagrams:
   -Select "Open Existing Diagram"  
   -Search for and select this repository where it says "Select File"  
   -Select the .xml file you would like to edit
+
+# update 3/28
+Minor changes to the EML diagram.
+Added SQL folder to contain the import parameters for eBird Data
