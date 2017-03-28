@@ -9,5 +9,5 @@ To edit diagrams:
   -Select the .xml file you would like to edit
 
 # update 3/28
-Minor changes to the EML diagram.
+Minor changes to the ER diagram.
 Added SQL folder to contain the import parameters for eBird Data
