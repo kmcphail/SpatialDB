@@ -1,0 +1,22 @@
+Final Project Report
+
+-Guidelines:
+    -No more than 15 pages at 1.5 line spacing
+    -Format and style should conform to standards suitable for publication. 
+    -Details your thought process, approach, and results.
+    -Add maps/figures/tables/etc as needed.
+
+
+
+Title: Avian GeoSearch
+
+Authors: McPhail, K. & Moore, D.
+
+
+Section 1: Problem statement
+
+Section 2: Description of database design, implementation, and manipulations
+
+Section 3: Case studies and results
+
+Section 4: References
