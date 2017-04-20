@@ -1,0 +1,19 @@
+Part II - Project Report
+
+1) Model design
+    -Documents about datasets, subtypes, domains, and relationships.
+    -Conceptual model
+        -Define entity types and attributes for each.
+        -Define both spatial and non-spatial relationships.
+        -Define key/domain/topological constraints.
+    -Logical schema diagram mapped from conceptual model.
+
+2) Database implementation
+    - Build tables and feature classes.
+    - Configure constraints/relationships/etc for tables & feature classes.
+    - Population database with datasets.
+
+3) Database manipulations
+    - Design and write set of queries that answer your research question.
+    - Create necessary maps to answer spatial problems.
+    - Perform join operations if necessary. 
