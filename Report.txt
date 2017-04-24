@@ -10,7 +10,14 @@ McPhail, K. & Moore, D.
 
 
 Section 1: Problem statement
-
+    Intro:
+    In the age of online collaboration, the scientific research community at large has gained the ability to more readily share their findings with the public. Likewise, so has the general population; thus, the concept of "citizen science" has thrived.  One of our primary sources, eBird, is a prime example of an organization that utilizes data from these self-titled “citizen scientists”. The Cornell Lab of Ornithology and National Audubon Society pooled their resources in 2002, resulting into what is now “…one of the largest and fastest growing biodiversity data resources in existence.” (eBird.org).
+    Research Questions: 
+    
+    Data Description/Sources: 
+    
+    Expectations & Transition to Section 2:
+    
 
 Section 2: Description of database design, implementation, and manipulations
 
