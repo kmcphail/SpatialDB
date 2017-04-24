@@ -1,29 +1,26 @@
---Final Project Report
-
---Guidelines:
-    -No more than 15 pages at 1.5 line spacing
-    -Format and style should conform to standards suitable for publication. 
-    -Details your thought process, approach, and results.
-    -Add maps/figures/tables/etc as needed.
+Guidelines:
+* No more than 15 pages at 1.5 line spacing
+* Format and style should conform to standards suitable for publication. 
+* Details your thought process, approach, and results.
+* Add maps/figures/tables/etc as needed.
 
 
+## Avian GeoSearch
 
-Title: Avian GeoSearch
-
-Authors: McPhail, K. & Moore, D.
+**McPhail, K. & Moore, D.**
 
 
-Section 1: Problem statement
+### Section 1: Problem statement
 
-Section 2: Description of database design, implementation, and manipulations
+### Section 2: Description of database design, implementation, and manipulations
 
-Section 3: Case studies and results
+### Section 3: Case studies and results
 
-Section 4: References
+### Section 4: References
 
-    eBird Basic Dataset, Version: EBD_US_relFeb-2017. Cornell Lab of Ornithology, Ithaca, New York. Feb 2017. 
-        <https://ebird.org/ebird/data/download> Accessed Mar 2017.
-    Protected Areas Database of the United States (PAD-US), Version: PADUS1_4Shapefile. U.S. Geological Survey, 
-        Gap Analysis Program (GAP). May 2016. <https://gapanalysis.usgs.gov/padus/data/download/> Accessed Mar 2017.
-    TIGER/Line Shapefiles, Versions: tl_2016_us_state, tl_2016_us_county. U.S. Census Bureau. 2016. 
-        <https://www.census.gov/geo/maps-data/data/tiger-line.html> Accessed Apr 2017.
+eBird Basic Dataset, Version: EBD_US_relFeb-2017. Cornell Lab of Ornithology, Ithaca, New York. Feb 2017. 
+    <https://ebird.org/ebird/data/download> Accessed Mar 2017.
+Protected Areas Database of the United States (PAD-US), Version: PADUS1_4Shapefile. U.S. Geological Survey, 
+    Gap Analysis Program (GAP). May 2016. <https://gapanalysis.usgs.gov/padus/data/download/> Accessed Mar 2017.
+TIGER/Line Shapefiles, Versions: tl_2016_us_state, tl_2016_us_county. U.S. Census Bureau. 2016. 
+    <https://www.census.gov/geo/maps-data/data/tiger-line.html> Accessed Apr 2017.
