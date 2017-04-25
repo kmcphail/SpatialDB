@@ -1,0 +1,211 @@
+  category   | d_category  
+-------------+-------------
+ Designation | Designation
+ Easement    | Easement
+ Fee         | Fee
+ Other       | Other
+ Unknown     | Unknown
+(5 rows)
+
+ own_type |            d_own_type            
+----------+----------------------------------
+ DESG     | Designation
+ DIST     | Regional Agency Special District
+ FED      | Federal
+ JNT      | Joint
+ LOC      | Local Government
+ NGO      | Non-Governmental Organization
+ PVT      | Private
+ STAT     | State
+ TERR     | Territorial
+ TRIB     | American Indian Lands
+ UNK      | Unknown
+(11 rows)
+
+ own_name |                   d_own_name                    
+----------+-------------------------------------------------
+ BLM      | Bureau of Land Management
+ CITY     | City Land
+ CNTY     | County Land
+ DESG     | Designation
+ DOD      | Department of Defense
+ FM       | Federated States of Micronesia Government
+ FWS      | U.S. Fish & Wildlife Service
+ GU       | Guam Government
+ JNT      | Joint
+ MP       | Mariana Islands Government
+ NGO      | Non-Governmental Organization
+ NOAA     | National Oceanic and Atmospheric Administration
+ NPS      | National Park Service
+ OTHF     | Other or Unknown Federal Land
+ OTHR     | Other
+ OTHS     | Other or Unknown State Land
+ PR       | Puerto Rico Government
+ PVT      | Private
+ PW       | Palau Government
+ REG      | Regional Agency Land
+ RWD      | Regional Water Districts
+ SDC      | State Department of Conservation
+ SDNR     | State Department of Natural Resources
+ SDOL     | State Department of Land
+ SFW      | State Fish and Wildlife
+ SLB      | State Land Board
+ SPR      | State Park and Recreation
+ TRIB     | American Indian Lands
+ TVA      | Tennessee Valley Authority
+ UNK      | Unknown
+ UNKL     | Other or Unknown Local Government
+ USBR     | Bureau of Reclamation
+ USFS     | Forest Service
+ VI       | U.S. Virgin Islands Government
+(34 rows)
+
+ mang_type |            d_mang_typ            
+-----------+----------------------------------
+ DIST      | Regional Agency Special District
+ FED       | Federal
+ JNT       | Joint
+ LOC       | Local Government
+ NGO       | Non-Governmental Organization
+ PVT       | Private
+ STAT      | State
+ TERR      | Territorial
+ TRIB      | American Indian Lands
+ UNK       | Unknown
+(10 rows)
+
+ mang_name |                   d_mang_nam                    
+-----------+-------------------------------------------------
+ ARS       | Agricultural Research Service
+ BIA       | Bureau of Indian Affairs
+ BLM       | Bureau of Land Management
+ CITY      | City Land
+ CNTY      | County Land
+ DOD       | Department of Defense
+ DOE       | Department of Energy
+ FM        | Federated States of Micronesia Government
+ FWS       | U.S. Fish & Wildlife Service
+ GU        | Guam Government
+ JNT       | Joint
+ MP        | Mariana Islands Government
+ NGO       | Non-Governmental Organization
+ NOAA      | National Oceanic and Atmospheric Administration
+ NPS       | National Park Service
+ NRCS      | Natural Resources Conservation Service
+ OTHF      | Other or Unknown Federal Land
+ OTHR      | Other
+ OTHS      | Other or Unknown State Land
+ PVT       | Private
+ PW        | Palau Government
+ REG       | Regional Agency Land
+ RWD       | Regional Water Districts
+ SDC       | State Department of Conservation
+ SDNR      | State Department of Natural Resources
+ SDOL      | State Department of Land
+ SFW       | State Fish and Wildlife
+ SLB       | State Land Board
+ SPR       | State Park and Recreation
+ TRIB      | American Indian Lands
+ TVA       | Tennessee Valley Authority
+ UNK       | Unknown
+ UNKL      | Other or Unknown Local Government
+ USACE     | Army Corps of Engineers
+ USBR      | Bureau of Reclamation
+ USFS      | Forest Service
+(36 rows)
+
+ des_tp |                  d_des_tp                   
+--------+---------------------------------------------
+ ACC    | Access Area
+ ACEC   | Area of Critical Environmental Concern
+ AGRE   | Agricultural Easement
+ CONE   | Conservation Easement
+ FORE   | Forest Stewardship Easement
+ FOTH   | Federal Other or Unknown
+ HCA    | Historic or Cultural Area
+ HCAE   | Historic or Cultural Easement
+ IRA    | Inventoried Roadless Area
+ LCA    | Local Conservation Area
+ LHCA   | Local Historic or Cultural Area
+ LOTH   | Local Other or Unknown
+ LP     | Local Park
+ LREC   | Local Recreation Area
+ LRMA   | Local Resource Management Area
+ MIL    | Military Land
+ MIT    | Mitigation Land or Bank
+ MPA    | Marine Protected Area
+ NCA    | Conservation Area
+ ND     | Not Designated
+ NF     | National Forest
+ NG     | National Grassland
+ NLS    | National Lakeshore or Seashore
+ NM     | National Monument or Landmark
+ NP     | National Park
+ NRA    | National Recreation Area
+ NSBV   | National Scenic, Botanical or Volcanic Area
+ NT     | National Scenic or Historic Trail
+ NWR    | National Wildlife Refuge
+ OTHE   | Other Easement
+ PAGR   | Private Agricultural
+ PCON   | Private Conservation
+ PFOR   | Private Forest Stewardship
+ PHCA   | Private Historic or Cultural               +
+        | 
+ POTH   | Private Other or Unknown
+ PRAN   | Private Ranch
+ PREC   | Private Recreation or Education
+ PROC   | Approved or Proclamation Boundary
+ PUB    | National Public Lands
+ RANE   | Ranch Easement
+ REA    | Research or Educational Area
+ REC    | Recreation Management Area
+ RECE   | Recreation or Education Easement
+ RMA    | Resource Management Area
+ RNA    | Research Natural Area
+ SCA    | State Conservation Area
+ SDA    | Special Designation Area
+ SHCA   | State Historic or Cultural Area
+ SOTH   | State Other or Unknown
+ SP     | State Park
+ SREC   | State Recreation Area
+ SRMA   | State Resource Management Area
+ SW     | State Wilderness
+ TRIBL  | Native American Land
+ UNK    | Unknown
+ UNKE   | Unknown Easement
+ WA     | Wilderness Area
+ WPA    | Watershed Protection Area
+ WSA    | Wilderness Study Area
+ WSR    | Wild and Scenic River
+(60 rows)
+
+ access |     d_access      
+--------+-------------------
+ OA     | Open Access
+ RA     | Restricted Access
+ UK     | Unknown
+ XA     | Closed
+(4 rows)
+
+ gap_sts |                                         d_gap_sts                                         
+---------+-------------------------------------------------------------------------------------------
+ 1       | 1 - managed for biodiversity - disturbance events proceed or are mimicked
+ 2       | 2 - managed for biodiversity - disturbance events suppressed
+ 3       | 3 - managed for multiple uses - subject to extractive (e.g. mining or logging) or OHV use
+ 4       | 4 - no known mandate for protection
+(4 rows)
+
+        iucn_cat         |                          d_iucn_cat                          
+-------------------------+--------------------------------------------------------------
+ II                      | II: National park
+ III                     | III: Natural monument or feature
+ IV                      | IV: Habitat / species management
+ Ia                      | Ia: Strict nature reserves
+ Ib                      | Ib: Wilderness areas
+ N/R                     | Not Reported
+ Other Conservation Area | Other Conservation Area
+ Unassigned              | Unassigned
+ V                       | V: Protected landscape / seascape
+ VI                      | VI: Protected area with sustainable use of natural resources
+(10 rows)
+
