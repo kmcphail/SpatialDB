@@ -13,6 +13,7 @@ Section 1: Problem statement
     Intro:
     In the age of online collaboration, the scientific research community at large has gained the ability to more readily share their findings with the public. Likewise, so has the general population; thus, the concept of "citizen science" has thrived.  One of our primary sources, eBird, is a prime example of an organization that utilizes data from these self-titled “citizen scientists”. The Cornell Lab of Ornithology and National Audubon Society pooled their resources in 2002, resulting into what is now “…one of the largest and fastest growing biodiversity data resources in existence.” (eBird.org).
     Research Questions: 
+    From the early planning stages, our primary objective has been: the creation of a platform that answers variations of these three questions: What bird species can I see nearby? Where can I see a certain species nearby? When can I see a certain species nearby? If you look back towards the first question you can see that at a minimum, a location must be provided. This requirement continues for the second and third questions; however, these two queries allow for bird species as an additional parameter. More detailed queries may include specifying a certain month, natural area, or any combination of the aforementioned variables. This project focuses on solutions to these concerns through the design, creation, and implementation of a spatial database, along with custom functions, joins, and relationships.
     
     Data Description/Sources: 
     
