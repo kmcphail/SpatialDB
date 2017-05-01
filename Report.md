@@ -36,20 +36,18 @@ Three main sources formed our database: the eBird Basic Dataset from Cornell, th
  - [ ] KM
  - [ ] DM
 
-Although the raw data we obtained has the potential for extensive analytical research, our database will mainly cater to the average outdoor enthusiast and thus many of the original fields proved unnecessary. Our goal in combining these resources is developing a search tool that is both comprehensive and practical at a local scale. 
+Although the raw data we obtained has the potential for extensive analytical research, our database will primarily cater to the average outdoor enthusiast and thus many of the original fields proved unnecessary. Our goal in combining these resources is developing a search tool that is both comprehensive and practical at a local scale. 
     
 
 ### Section 2: Database Design & Manipulation
-
-- [ ] **Database Design**:
- - [ ] KM
- - [ ] DM
-
 
 - [ ] **Conceptual Model & Description**:
  - [ ] KM
  - [ ] DM
 
+We translated our source data into four spatial entities (see "ebird", "area", "state", "county" in figure 1) placed in three categories, which are expressed as schemas during the database implementation phase. The first category consists of species observations depicted as points, another contains protected lands with polygon geometry, and the last category holds both states and counties represented as polygons. Given the amount of overlap in field values within each entity, minimizing redundancy via normalization became the next priority. 
+
+_Figure 1. Entity-Relationship diagram
 
 - [ ] **Logical Model & Description**:
  - [ ] KM
