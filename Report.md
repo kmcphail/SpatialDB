@@ -47,7 +47,7 @@ Although the raw data we obtained has the potential for extensive analytical res
 
 We translated our source data into four spatial entities (see "ebird", "area", "state", "county" in figure 1) placed in three categories, which are expressed as schemas during the database implementation phase. The first category consists of species observations depicted as points, another contains protected lands with polygon geometry, and the last category holds both states and counties represented as polygons. Given the amount of overlap in field values within each entity, minimizing redundancy via normalization became the next priority. 
 
-_Figure 1. Entity-Relationship diagram
+_Figure 1. Entity-Relationship diagram_
 
 - [ ] **Logical Model & Description**:
  - [ ] KM
