@@ -37,3 +37,26 @@ ORDER BY
 		4326
 	)
 LIMIT 1;
+
+-- Simple query that lists all 'Open Access' protected areas within the specified county.
+-- For extra results replace "ST_WITHIN" with "ST_INTERSECTS".
+SELECT up.unit_nm FROM usgs_pad.area AS up
+JOIN census.county AS cn ON ST_WITHIN(up.geom, cn.geom)
+WHERE cn.name = 'Dane' AND cn.state = 'WI' AND up.access = 'OA'
+GROUP BY up.unit_nm
+ORDER BY up.unit_nm;
+
+-- A query to find protected areas with certain species. 
+WITH local_sp AS (
+	SELECT eb.geom FROM ebd.ebird AS eb
+	JOIN census.county AS cn ON ST_INTERSECTS(eb.geom, cn.geom)
+	WHERE
+		cn.name = 'Dane' AND 
+		cn.state = 'WI' AND 
+		eb.common_name = 'American Robin'		
+	)
+SELECT up.unit_nm, up.access FROM usgs_pad.area AS up
+JOIN local_sp ON ST_INTERSECTS(local_sp.geom, up.geom)
+GROUP BY up.unit_nm, up.access
+ORDER BY up.access, up.unit_nm;
+
