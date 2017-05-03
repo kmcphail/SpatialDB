@@ -75,6 +75,7 @@ To import the eBird data, we used an example found on the web (https://github.co
 Data for the census and usgs schemas were uploaded using the SHP2PGSQL command. Once imported the USGS PAD tabe ("area") was used to create several additional list tables to eliminate 'duplicate' attributes, as described above. Please see the ER Model and Logical Diagram for details. We used the state name (census.state.name) as a foreign key in the USGS PAD table (usgs_pad.area.state_nm). There are no onter direct linkages between the tables in different schaa's - all of the other conenctions are spatial in nature.
 
 For each table, indexes were created on fields pertinet to our core queries. The list indludes:
+
 **ebd.ebird**
 - CREATE INDEX ebird_geom_idx ON ebd.ebird USING GIST (geom);
 - CREATE INDEX ebird_common_name_idx ON ebd.ebird (common_name);
@@ -105,7 +106,21 @@ For each table, indexes were created on fields pertinet to our core queries. The
  - [ ] KM
  - [ ] DM
 
-Tow answer our core questions, we created several example queries. Below are examples of the queries and results.
+To answer our core questions, we created several example queries. Below are examples of the queries and results.
+
+		-- A query to find protected areas with certain species. 
+		WITH local_sp AS (
+			SELECT eb.geom FROM ebd.ebird AS eb
+			JOIN census.county AS cn ON ST_INTERSECTS(eb.geom, cn.geom)
+			WHERE
+				cn.name = 'Dane' AND 
+				cn.state = 'WI' AND 
+				eb.common_name = 'American Robin'		
+			)
+		SELECT up.unit_nm, up.access FROM usgs_pad.area AS up
+		JOIN local_sp ON ST_INTERSECTS(local_sp.geom, up.geom)
+		GROUP BY up.unit_nm, up.access
+		ORDER BY up.access, up.unit_nm;
 
 
 ### Section 3: Results & Conclusion
