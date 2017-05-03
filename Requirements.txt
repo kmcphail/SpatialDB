@@ -1,6 +1,13 @@
 Part II - Project Report
 
-1) Model design
+Guidelines:
+- No more than 15 pages at 1.5 line spacing
+- Format and style should conform to standards suitable for publication. 
+- Details your thought process, approach, and results.
+- Add maps/figures/tables/etc as needed.
+
+Requirements:
+1) Model design (35%)
     -Documents about datasets, subtypes, domains, and relationships.
     -Conceptual model
         -Define entity types and attributes for each.
@@ -8,12 +15,12 @@ Part II - Project Report
         -Define key/domain/topological constraints.
     -Logical schema diagram mapped from conceptual model.
 
-2) Database implementation
+2) Database implementation (40%)
     - Build tables and feature classes.
     - Configure constraints/relationships/etc for tables & feature classes.
     - Population database with datasets.
 
-3) Database manipulations
+3) Database manipulations (25%)
     - Design and write set of queries that answer your research question.
     - Create necessary maps to answer spatial problems.
-    - Perform join operations if necessary. 
+    - Perform join operations if necessary.
