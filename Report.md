@@ -66,7 +66,7 @@ _Figure 1. Entity-Relationship diagram_
 
 - [ ] **Database Implementation**:
  - [ ] KM
- - [X] DM 
+ - [X] DM
 
 The database sections were pulled from existing (third-party) databases, namely eBird, the USGS Protected Area Database (USGS PAD), and the US Census Tiger data. In each case, we created separate schema to hold these databases. Our research questions do not require that we keep all of the attributes in each table. We eliminated attribute fields that were not useful for our question. Further, the database providers often included duplicative fields to make it easier for outside users to query by easy to read fields. For example, the USGS PAD includes both a coded value and descriptive value for a 8 fields (16 in total). In the case of the USGS PAD, we created list tables that are foreign keys and reduce the number of fields stored in the core table. We created a similar table in eBird schema to hold common and scientific names.
 
@@ -104,7 +104,7 @@ For each table, indexes were created on fields pertinet to our core queries. The
 
 - [ ] **Database Manipulations**:
  - [ ] KM
- - [ ] DM
+ - [X] DM
 
 To answer our core questions, we created several example queries. Below are examples of the queries and results.
 
