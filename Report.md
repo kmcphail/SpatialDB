@@ -128,79 +128,150 @@ For each table, indexes were created on fields pertinent to our core queries. Th
 
 To answer our core questions, we created several example queries. Below are examples of the queries and results.
 
-		**QUERY**
-		-- A query to find accessible protected areas with certain species. 
-		WITH local_sp AS (
-			SELECT eb.geom FROM ebd.ebird AS eb
-			JOIN census.county AS cn ON ST_INTERSECTS(eb.geom, cn.geom)
-			WHERE
-				cn.name = 'Dane' AND 
-				cn.state = 'WI' AND 
-				eb.common_name = 'Sandhill Crane'		
-			)
-		SELECT up.unit_nm as protected_area, ac.d_access as access_type 
-		FROM usgs_pad.area AS up
-		JOIN local_sp ON ST_INTERSECTS(local_sp.geom, up.geom)
-		JOIN usgs_pad."access" as ac on up."access"=ac."access"
-		WHERE up."access"NOT IN ('UK','XA')
-		GROUP BY up.unit_nm, ac.d_access
-		ORDER BY ac.d_access, up.unit_nm;
+Find Protected Areas (without access restrictions) in a particular county that has records of a particular species.
 
-		**RESULTS**
-		protected_area				|	access_type
-		--------------------------------------------------------------
-		Black Earth Creek Fishery Area		|	Open Access
-		Capitol Springs Centennial State Park	|	Open Access
-		Cherokee Marsh Fishery Area		|	Open Access
-		Cross Plains State Park			|	Open Access
-		Dane County Waterfowl Production Area	|	Open Access
-		Door Creek				|	Open Access
-		Dorn Creek Fishery Area			|	Open Access
-		...
-		Bad Fish Creek Wildlife Area 		|	Restricted Access
-		Brooklyn Wildlife Area			|	Restricted Access
-		Deansville Wildlife Area		|	Restricted Access
-		Extensive Wl Habitat			|	Restricted Access
-		Goose Lake Wildlife Area		|	Restricted Access
-		...
-
-
-		**QUERY**
-		-- A query to create a bird list for a protected area in a particular month
-		--	In this example, since Devil's Lake State Park has several polygons and not just one, 
-		--	I used LIKE in the WHERE clause to caputer them all
-		SELECT
-			e.common_name,
-			e.scientific_name
-		FROM
-			ebird AS e
-		JOIN usgs_pad.area AS pa ON ST_Intersects (pa.geom, e.geom)
+	**QUERY**
+	-- A query to find accessible protected areas with certain species. 
+	WITH local_sp AS (
+		SELECT eb.geom FROM ebd.ebird AS eb
+		JOIN census.county AS cn ON ST_INTERSECTS(eb.geom, cn.geom)
 		WHERE
-			LOWER (pa.unit_nm) LIKE 'devils lake%'
-			AND pa.state_nm = 'WI'
-			AND date_part('month', e.observation_date) = '5'
-		GROUP BY
-			common_name,
-			scientific_name
-		ORDER BY
-			e.common_name;
+			cn.name = 'Dane' AND 
+			cn.state = 'WI' AND 
+			eb.common_name = 'Sandhill Crane'		
+		)
+	SELECT up.unit_nm as protected_area, ac.d_access as access_type 
+	FROM usgs_pad.area AS up
+	JOIN local_sp ON ST_INTERSECTS(local_sp.geom, up.geom)
+	JOIN usgs_pad."access" as ac on up."access"=ac."access"
+	WHERE up."access"NOT IN ('UK','XA')
+	GROUP BY up.unit_nm, ac.d_access
+	ORDER BY ac.d_access, up.unit_nm;
+
+	**RESULTS**
+	            protected_area             | access_type
+	---------------------------------------+-------------
+	 Black Earth Creek Fishery Area        | Open Access
+	 Capitol Springs Centennial State Park | Open Access
+	 Cherokee Marsh Fishery Area           | Open Access
+	 Cross Plains State Park               | Open Access
+	 Dane County Waterfowl Production Area | Open Access
+	 Door Creek                            | Open Access
+	 Dorn Creek Fishery Area               | Open Access
+	 E-Way                                 | Open Access
+	 Glacial Drumlin - Cattell             | Open Access
+	 Glacial Drumlin State Trail           | Open Access
+	... list continues ...
+
+Create a list of species you might expect to see in a specific protected area.
+
+	**QUERY**
+	-- A query to create a bird list for a protected area in a particular month
+	--	In this example, since Devil's Lake State Park has several polygons and not just one, 
+	--	I used LIKE in the WHERE clause to caputer them all
+	SELECT
+		e.common_name,
+		e.scientific_name
+	FROM
+		ebd.ebird AS e
+	JOIN usgs_pad.area AS pa ON ST_Intersects (pa.geom, e.geom)
+	WHERE
+		LOWER (pa.unit_nm) LIKE 'devils lake%'
+		AND pa.state_nm = 'WI'
+		AND date_part('month', e.observation_date) = '5'
+	GROUP BY
+		common_name,
+		scientific_name
+	ORDER BY
+		e.common_name;
 
 
-		**RESULTS**
-		common_name 		|	scientific_name
-		------------------------------------------------
-		Acadian Flycatcher	|	Empidonax virescens
-		Accipiter sp.		|	Accipiter sp.
-		Alder Flycatcher	|	Empidonax alnorum
-		American Coot		|	Fulica americana
-		American Crow		|	Corvus brachyrhynchos
-		American Goldfinch	|	Spinus tristis
-		American Kestrel	|	Falco sparverius
-		American Redstart	|	Setophaga ruticilla
-		...
-		Yellow-rumped Warbler	|	Setophaga coronata
-		Yellow-throated Vireo	|	Vireo flavifrons
-		Yellow Warbler		|	Setophaga petechia
+	**RESULTS**
+	      common_name      |    scientific_name
+	-----------------------+-----------------------
+	 Acadian Flycatcher    | Empidonax virescens
+	 Accipiter sp.         | Accipiter sp.
+	 Alder Flycatcher      | Empidonax alnorum
+	 American Coot         | Fulica americana
+	 American Crow         | Corvus brachyrhynchos
+	 American Goldfinch    | Spinus tristis
+	 American Kestrel      | Falco sparverius
+	 American Redstart     | Setophaga ruticilla
+	 American Robin        | Turdus migratorius
+	 American Tree Sparrow | Spizelloides arborea
+	 ... list continues ...
+
+Find the nearest publicly accessible Protected Area where one might find a particular species this month. This is a pretty complex query and would do well to be transformed into a function.
+
+	**QUERY**
+	-- A query to find the nearest PA where a species can be seen (this month and using data since 2015)
+	SELECT
+		up.unit_nm AS pa_name,
+		up.state_nm AS "state",
+		ST_Distance (up.geom :: geography, ST_SetSRID(ST_POINT(- 89.7485322, 43.4687975),4326)) / 1000 AS distance_km
+	FROM
+		usgs_pad.area AS up
+	JOIN ebd.ebird e ON ST_INTERSECTS (e.geom, up.geom)
+	WHERE
+		e.common_name = 'American Bittern'
+		AND up."access" NOT IN ('XA', 'UK')
+		AND e.observation_date >= '2015-01-01'
+		AND date_part('month', e.observation_date) = date_part('month', now())
+	GROUP BY up.unit_nm, up.state_nm, up.geom
+	ORDER BY
+		up.geom <-> ST_SetSRID (
+			ST_POINT (- 89.7485322, 43.4687975),
+			4326
+		)
+	LIMIT 10;
+
+	**RESULTS**
+		            pa_name                     | state |  distance_km
+	------------------------------------------------+-------+----------------
+	 Statewide Natural Area                         | WI    |  3.60143062977
+	 Dane County Waterfowl Production Area          | WI    | 32.53233368161
+	 Quincy Bluff And Wetlands Natural Area         | WI    | 42.59313832168
+	 Grand River Marsh Wildlife Area                | WI    | 47.31264756116
+	 Germania Wildlife Area                         | WI    | 59.74288461056
+	 Hook Lake/grass Lake Wildlife And Natural Area | WI    | 65.19609125151
+	 Necedah National Wildlife Refuge               | WI    | 68.56909126759
+	 Leola Marsh Wildlife Area                      | WI    | 79.36120575309
+	 White River Marsh Wildlife Area                | WI    | 69.42757766956
+	 Wood County Forest                             | WI    | 89.32880702701
+	(10 rows)
+
+Given the complexity of the above query, we created a function that outputs the same information but allows the user to enter simpler criteria.
+
+	CREATE FUNCTION "ebd"."NewProc"(float8, float8, varchar, int4)
+  	RETURNS SETOF "ebd"."_near_pa" AS $BODY$SELECT
+		up.unit_nm AS pa_name,
+		up.state_nm AS "state",
+		ST_Distance (up.geom :: geography, ST_SetSRID(ST_POINT($1, $2),4326)) / 1000 AS distance_km
+	FROM
+		usgs_pad.area AS up
+	JOIN ebd.ebird e ON ST_INTERSECTS (e.geom, up.geom)
+	WHERE
+		e.common_name = $3
+		AND up."access" NOT IN ('XA', 'UK')
+		AND e.observation_date >= '2014-01-01'
+		AND date_part('month', e.observation_date)::int = $4
+	GROUP BY up.unit_nm, up.state_nm, up.geom
+	ORDER BY
+		up.geom <-> ST_SetSRID (
+			ST_POINT ($1, $2),
+			4326
+		)
+	LIMIT 10;$BODY$
+  	LANGUAGE 'sql' VOLATILE COST 100
+ 	ROWS 10
+	;
+
+	ALTER FUNCTION "ebd"."NewProc"(float8, float8, varchar, int4) OWNER TO "geog574";
+
+The Query ends up looking like this:
+
+	select ebd.near_pa_for_sp(-89.4021755,43.075816,'Sandhill Crane',5);
+
 
 ### Section 3: Results & Conclusion
 
