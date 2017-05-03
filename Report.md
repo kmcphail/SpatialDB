@@ -68,7 +68,7 @@ _Figure 2. Logical diagram_
 
 - [ ] **Database Implementation**:
  - [ ] KM
- - [X] DM 
+ - [X] DM
 
 The database sections were pulled from existing (third-party) databases, namely eBird, the USGS Protected Area Database (USGS PAD), and the US Census Tiger data. In each case, we created separate schema to hold these databases. Our research questions do not require that we keep all of the attributes in each table. We eliminated attribute fields that were not useful for our question. Further, the database providers often included duplicative fields to make it easier for outside users to query by easy to read fields. For example, the USGS PAD includes both a coded value and descriptive value for a 8 fields (16 in total). In the case of the USGS PAD, we created list tables that are foreign keys and reduce the number of fields stored in the core table. We created a similar table in eBird schema to hold common and scientific names.
 
@@ -77,6 +77,7 @@ To import the eBird data, we used an example found on the web (https://github.co
 Data for the census and usgs schemas were uploaded using the SHP2PGSQL command. Once imported the USGS PAD tabe ("area") was used to create several additional list tables to eliminate 'duplicate' attributes, as described above. Please see the ER Model and Logical Diagram for details. We used the state name (census.state.name) as a foreign key in the USGS PAD table (usgs_pad.area.state_nm). There are no onter direct linkages between the tables in different schaa's - all of the other conenctions are spatial in nature.
 
 For each table, indexes were created on fields pertinet to our core queries. The list indludes:
+
  **ebd.ebird**
  - CREATE INDEX ebird_geom_idx ON ebd.ebird USING GIST (geom);
  - CREATE INDEX ebird_common_name_idx ON ebd.ebird (common_name);
@@ -101,13 +102,85 @@ For each table, indexes were created on fields pertinet to our core queries. The
  - CREATE INDEX county_geom_idx ON census.county USING GIST (geom);
  - CREATE INDEX county_name_idx ON census.county (name);
 
-
 - [ ] **Database Manipulations**:
  - [ ] KM
- - [ ] DM
+ - [X] DM
 
-Tow answer our core questions, we created several example queries. Below are examples of the queries and results.
+To answer our core questions, we created several example queries. Below are examples of the queries and results.
 
+		**QUERY**
+		-- A query to find accessible protected areas with certain species. 
+		WITH local_sp AS (
+			SELECT eb.geom FROM ebd.ebird AS eb
+			JOIN census.county AS cn ON ST_INTERSECTS(eb.geom, cn.geom)
+			WHERE
+				cn.name = 'Dane' AND 
+				cn.state = 'WI' AND 
+				eb.common_name = 'Sandhill Crane'		
+			)
+		SELECT up.unit_nm as protected_area, ac.d_access as access_type 
+		FROM usgs_pad.area AS up
+		JOIN local_sp ON ST_INTERSECTS(local_sp.geom, up.geom)
+		JOIN usgs_pad."access" as ac on up."access"=ac."access"
+		WHERE up."access"NOT IN ('UK','XA')
+		GROUP BY up.unit_nm, ac.d_access
+		ORDER BY ac.d_access, up.unit_nm;
+
+		**RESULTS**
+		protected_area				|	access_type
+		--------------------------------------------------------------
+		Black Earth Creek Fishery Area		|	Open Access
+		Capitol Springs Centennial State Park	|	Open Access
+		Cherokee Marsh Fishery Area		|	Open Access
+		Cross Plains State Park			|	Open Access
+		Dane County Waterfowl Production Area	|	Open Access
+		Door Creek				|	Open Access
+		Dorn Creek Fishery Area			|	Open Access
+		...
+		Bad Fish Creek Wildlife Area 		|	Restricted Access
+		Brooklyn Wildlife Area			|	Restricted Access
+		Deansville Wildlife Area		|	Restricted Access
+		Extensive Wl Habitat			|	Restricted Access
+		Goose Lake Wildlife Area		|	Restricted Access
+		...
+
+
+		**QUERY**
+		-- A query to create a bird list for a protected area in a particular month
+		--	In this example, since Devil's Lake State Park has several polygons and not just one, 
+		--	I used LIKE in the WHERE clause to caputer them all
+		SELECT
+			e.common_name,
+			e.scientific_name
+		FROM
+			ebird AS e
+		JOIN usgs_pad.area AS pa ON ST_Intersects (pa.geom, e.geom)
+		WHERE
+			LOWER (pa.unit_nm) LIKE 'devils lake%'
+			AND pa.state_nm = 'WI'
+			AND date_part('month', e.observation_date) = '5'
+		GROUP BY
+			common_name,
+			scientific_name
+		ORDER BY
+			e.common_name;
+
+
+		**RESULTS**
+		common_name 		|	scientific_name
+		------------------------------------------------
+		Acadian Flycatcher	|	Empidonax virescens
+		Accipiter sp.		|	Accipiter sp.
+		Alder Flycatcher	|	Empidonax alnorum
+		American Coot		|	Fulica americana
+		American Crow		|	Corvus brachyrhynchos
+		American Goldfinch	|	Spinus tristis
+		American Kestrel	|	Falco sparverius
+		American Redstart	|	Setophaga ruticilla
+		...
+		Yellow-rumped Warbler	|	Setophaga coronata
+		Yellow-throated Vireo	|	Vireo flavifrons
+		Yellow Warbler		|	Setophaga petechia
 
 ### Section 3: Results & Conclusion
 
