@@ -68,13 +68,46 @@ _Figure 2. Logical diagram_
 
 - [ ] **Database Implementation**:
  - [ ] KM
- - [ ] DM 
+ - [X] DM 
+
+The database sections were pulled from existing (third-party) databases, namely eBird, the USGS Protected Area Database (USGS PAD), and the US Census Tiger data. In each case, we created separate schema to hold these databases. Our research questions do not require that we keep all of the attributes in each table. We eliminated attribute fields that were not useful for our question. Further, the database providers often included duplicative fields to make it easier for outside users to query by easy to read fields. For example, the USGS PAD includes both a coded value and descriptive value for a 8 fields (16 in total). In the case of the USGS PAD, we created list tables that are foreign keys and reduce the number of fields stored in the core table. We created a similar table in eBird schema to hold common and scientific names.
+
+To import the eBird data, we used an example found on the web (https://github.com/weecology/retriever/issues/90) to create properly formated table. Once completed, we uploaded the US eBird data downloaded from their website to the database. The details of this process are described in SQL in _APPENDIX 1_.
+
+Data for the census and usgs schemas were uploaded using the SHP2PGSQL command. Once imported the USGS PAD tabe ("area") was used to create several additional list tables to eliminate 'duplicate' attributes, as described above. Please see the ER Model and Logical Diagram for details. We used the state name (census.state.name) as a foreign key in the USGS PAD table (usgs_pad.area.state_nm). There are no onter direct linkages between the tables in different schaa's - all of the other conenctions are spatial in nature.
+
+For each table, indexes were created on fields pertinet to our core queries. The list indludes:
+**ebd.ebird**
+- CREATE INDEX ebird_geom_idx ON ebd.ebird USING GIST (geom);
+- CREATE INDEX ebird_common_name_idx ON ebd.ebird (common_name);
+- CREATE INDEX ebird_scientific_name_idx ON ebd.ebird (scientific_name);
+- CREATE INDEX ebird_month_idx ON ebd.ebird (date_part('month',observation_date);
+- CREATE INDEX ebird_year_idx ON ebd.ebird (date_part('year',observation_date);
+- CREATE INDEX ebird_obsdate_idx ON ebd.ebird (observation_date);
+
+**usgs_pad.area**
+- CREATE INDEX area_geom_idx ON usgs_pad.area USING GIST (geom);
+- CREATE INDEX area_loc_nm_idx ON usgs_pad.area (loc_nm);
+- CREATE INDEX area_mang_nm_idx ON usgs_pad.area (mang_nm);
+- CREATE INDEX area_unit_nm_idx ON usgs_pad.area (unit_nm);
+
+**census.state**
+- CREATE INDEX state_geom_idx ON census.state USING GIST (geom);
+- CREATE INDEX county_name_idx ON census.state (name);
+- CREATE INDEX county_statefp_idx ON census.state (statefp);
+- CREATE INDEX county_stusps_idx ON census.state (stusps);
+
+**census.county**
+- CREATE INDEX county_geom_idx ON census.county USING GIST (geom);
+- CREATE INDEX county_name_idx ON census.county (name);
+
 
 
 - [ ] **Database Manipulations**:
  - [ ] KM
  - [ ] DM
 
+Tow answer our core questions, we created several example queries. Below are examples of the queries and results.
 
 
 ### Section 3: Results & Conclusion
