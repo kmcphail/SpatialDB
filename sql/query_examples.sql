@@ -53,12 +53,16 @@ WITH local_sp AS (
 	WHERE
 		cn.name = 'Dane' AND 
 		cn.state = 'WI' AND 
-		eb.common_name = 'American Robin'		
+		eb.common_name = 'Sandhill Crane'		
 	)
-SELECT up.unit_nm, up.access FROM usgs_pad.area AS up
+SELECT up.unit_nm as protected_area, ac.d_access as access_type 
+FROM usgs_pad.area AS up
 JOIN local_sp ON ST_INTERSECTS(local_sp.geom, up.geom)
-GROUP BY up.unit_nm, up.access
-ORDER BY up.access, up.unit_nm;
+JOIN usgs_pad."access" as ac on up."access"=ac."access"
+WHERE up."access"NOT IN ('UK','XA')
+GROUP BY up.unit_nm, ac.d_access
+ORDER BY ac.d_access, up.unit_nm;
+
 
 
 -- A query to create a bird list for a protected area in a particular month
