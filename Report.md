@@ -41,7 +41,7 @@ The first question demonstrates the minimum requirement when writing a proper qu
 Three main sources form our database: the eBird Basic Dataset from Cornell, the Protected Areas Database of the United States from USGS, and TIGER/Line Shapefiles from the U.S. Census Bureau. The download for the former source consists of a tab-delimited text file, imported as a table using the SQL copy command and assigned point geometry derived from longitude and latitude field values. The latter two sources were obtained as shapefiles and uploaded to our SQL database using PostGIS’ shp2pgsql and psql command line expressions. 
     
 - [ ] **Expectations & Transition to Section 2**:
- - [ ] KM
+ - [X] KM
  - [ ] DM
 
 Although the raw data we obtained has the potential for extensive analytical research, our database will primarily cater to the average outdoor enthusiast and thus many of the original fields proved unnecessary. Our goal in combining these resources is to develop a bird species search tool that is both comprehensive and practical at a local scale. 
@@ -49,20 +49,42 @@ Although the raw data we obtained has the potential for extensive analytical res
 We encountered several challenges working with such a vast dataset of species sightings. We were able to resolve several of these through query experimentation and will discuss those challenges and solutions in the sections below.
     
 
-### Section 2: Database Design & Manipulation
+### Section 2: Database Design, Implementation & Manipulation
 
-- [ ] **Conceptual Model & Description**:
- - [ ] KM
+- [ ] **Database Design**:
+ - [X] KM
  - [ ] DM
 
-We translated our source data into four spatial entities (see "ebird", "area", "state", "county" in figure 1) placed in three categories, which are expressed as schemas during the database implementation phase. The first category consists of species observations depicted as points, another contains protected lands with polygon geometry, and the last category holds both states and counties represented as polygons. Given the amount of overlap in field values within each entity, minimizing redundancy via normalization became the next priority. 
+We translated our source data into four spatial entities (see ebird, area, state, county in Figure 1) placed in three groups, which are later expressed as schemas during the database implementation phase. The first consists of species observations depicted as points, another contains protected lands with polygon geometry, and the last group holds both states and counties represented as polygons. Given the amount of overlap in field values within each entity, minimizing redundancy via normalization became the next priority. The bulk of non-spatial entities and attributes seen in Figure 1 originate from the area entity. Attributes for some might seem obvious based on names like manager_name and manager_type (e.g. values 'SFW', 'State Fish and Wildlife' for mang_name, d_mang_nam likely relate to 'STAT', 'State' for mang_type, d_mang_typ), but others may need further explanation. The most relevant for casual users is access. Composed of four domains, this entity details the level of public access permissible:
+- access
+   - OA - 'Open Access'
+   - RA - 'Restricted Access'
+   - XA - 'Closed'
+   - UK - 'Unknown'
+
+Some useful, but more niche entities derived from the area entity include: 
+- designation
+  - AGRE - 'Agricultural Easement'
+  - ...
+  - NT = 'National Scenic or Historic Trail'
+  - ...
+  - WSR - 'Wild and Scenic River'
+ 
+- gap_status
+  - 1 - 'managed for biodiversity - disturbance events proceed or are mimicked'
+  - 2 - 'managed for biodiversity - disturbance events surpressed'
+  - 3 - 'managed for multiple uses - subject to extractive (e.g. mining or loggin) or OHV use'
+  - 4 - 'no known mandate for protection'
+- iucn_cat
+  - Ia - 'Strict nature reserves'
+  - Ib - 'Wilderness areas'
+  - II - 'National park'
+  - III - 'Natural monument or feature'
+  - IV - 'Habitat / species management'
+  - V - 'Protected landscape / seascape'
+  - VI - 'Protected area with sustainable use of natural resources'
 
 _Figure 1. Entity-Relationship diagram_
-
-- [ ] **Logical Model & Description**:
- - [ ] KM
- - [ ] DM
-
 
 _Figure 2. Logical diagram_
 
