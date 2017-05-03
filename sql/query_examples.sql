@@ -60,3 +60,22 @@ JOIN local_sp ON ST_INTERSECTS(local_sp.geom, up.geom)
 GROUP BY up.unit_nm, up.access
 ORDER BY up.access, up.unit_nm;
 
+
+-- A query to create a bird list for a protected area in a particular month
+--	In this example, since Devil's Lake State Park has several polygons and not just one, 
+--	I used LIKE in the WHERE clause to caputer them all
+SELECT
+	e.common_name,
+	e.scientific_name
+FROM
+	ebird AS e
+JOIN usgs_pad.area AS pa ON ST_Intersects (pa.geom, e.geom)
+WHERE
+	LOWER (pa.unit_nm) LIKE 'devils lake%'
+	AND pa.state_nm = 'WI'
+	AND date_part('month', e.observation_date) = '5'
+GROUP BY
+	common_name,
+	scientific_name
+ORDER BY
+	e.common_name;
