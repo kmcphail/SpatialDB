@@ -66,8 +66,12 @@ _Figure 1. Entity-Relationship diagram_
 
 - [ ] **Database Implementation**:
  - [ ] KM
- - [ ] DM 
+ - [X] DM 
+The database sections were pulled from existing (third-party) databases, namely eBird, the USGS Protected Area Database (USGS PAD), and the US Census Tiger data. In each case, we created separate schema to hold these databases. Our research questions do not require that we keep all of the attributes in each table. We eliminated attribute fields that were not useful for our question. Further, the database providers often included duplicative fields to make it easier for outside users to query by easy to read fields. For example, the USGS PAD includes both a coded value and descriptive value for a 8 fields (16 in total). In the case of the USGS PAD, we created list tables that are foreign keys and reduce the number of fields stored in the core table. We created a similar table in eBird schema to hold common and scientific names.
 
+To import the eBird data, we used an example found on the web (https://github.com/weecology/retriever/issues/90) to create properly formated table. Once completed, we uploaded the US eBird data downloaded from their website to the database. The details of this process are described in SQL in _APPENDIX 1_.
+
+Data for the census and usgs schemas were uploaded using the SHP2PGSQL command.  
 
 - [ ] **Database Manipulations**:
  - [ ] KM
