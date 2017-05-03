@@ -15,28 +15,30 @@ GROUP BY cn.name, date_part('year', e.observation_date)
 ORDER BY cn.name ASC, date_part('year', e.observation_date) DESC
 ;
 
--- A query to find the nearest PA where a species can be seen (this month and using data since 2015)
+-- A query to find the 10 nearest Protected Areas where a species can be seen (this month and using data since 2014)
 -- 	We can trasnform this to a function to make it easier for data query
 --	 e.g.
 --	SELECT nearest_pa(common_name, month, your_longitude, your_latitude)
 --	Returns the nearest PA, state - we could add the county, distance (and bearing) if we like.
-
 SELECT
 	up.unit_nm AS pa_name,
-	up.state_nm AS "state"
+	up.state_nm AS "state",
+	ST_Distance (up.geom :: geography, ST_SetSRID(ST_POINT(- 89.7485322, 43.4687975),4326)) / 1000 AS distance_km
 FROM
-	usgs_pad.padus1_4combined_4326 AS up
+	usgs_pad.area AS up
 JOIN ebd.ebird e ON ST_INTERSECTS (e.geom, up.geom)
 WHERE
 	e.common_name = 'American Bittern'
-AND e.observation_date >= '2015-01-01'
+AND up."access" NOT IN ('XA', 'UK')
+AND e.observation_date >= '2014-01-01'
 AND date_part('month', e.observation_date) = date_part('month', now())
+GROUP BY up.unit_nm, up.state_nm, up.geom
 ORDER BY
 	up.geom <-> ST_SetSRID (
 		ST_POINT (- 89.7485322, 43.4687975),
 		4326
 	)
-LIMIT 1;
+LIMIT 10;
 
 -- Simple query that lists all 'Open Access' protected areas within the specified county.
 -- For extra results replace "ST_WITHIN" with "ST_INTERSECTS".
