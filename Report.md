@@ -201,6 +201,32 @@ Create a list of species you might expect to see in a specific protected area.
 	 American Tree Sparrow | Spizelloides arborea
 	 ... list continues ...
 
+Find all of the Protected Areas where Whooping Cranes have been seen since 2011.
+	
+	**QUERY**
+	
+	SELECT DISTINCT pa.unit_nm,pa.state_nm
+	FROM usgs_pad.area as pa 
+	JOIN ebd.ebird as e ON ST_Intersects(pa.geom,e.geom)
+	WHERE common_name='Whooping Crane' and observation_date>'2011-01-01'
+	GROUP BY pa.unit_nm, pa.state_nm
+	ORDER BY pa.state_nm, pa.unit_nm;
+	
+	**RESULTS**
+	                  unit_nm                   | state_nm
+	--------------------------------------------+----------
+	 Joe Wheeler State Park                     | AL
+	 Mallard-fox Creek Wildlife Management Area | AL
+	 State-owned Submerged Lands                | AL
+	 Wheeler Closing Order Boundary             | AL
+	 Wheeler National Wildlife Refuge           | AL
+	 Wheeler Reservoir Retained Land            | AL
+	 Arbuckle Airfield                          | FL
+	 Avon Park AF Range                         | FL
+	 Blackwater Creek Preserve                  | FL
+	 Blue Cypress Conservation Area             | FL
+	 ... list continues ...
+
 Find the nearest publicly accessible Protected Area where one might find a particular species this month. This is a pretty complex query and would do well to be transformed into a function.
 
 	**QUERY**
