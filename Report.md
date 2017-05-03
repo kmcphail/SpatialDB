@@ -242,6 +242,37 @@ Find the nearest publicly accessible Protected Area where one might find a parti
 	 Wood County Forest                             | WI    | 89.32880702701
 	(10 rows)
 
+Given the complexity of the above query, we created a function that outputs the same information but allows the user to enter simpler criteria.
+
+	CREATE FUNCTION "ebd"."NewProc"(float8, float8, varchar, int4)
+  	RETURNS SETOF "ebd"."_near_pa" AS $BODY$SELECT
+		up.unit_nm AS pa_name,
+		up.state_nm AS "state",
+		ST_Distance (up.geom :: geography, ST_SetSRID(ST_POINT($1, $2),4326)) / 1000 AS distance_km
+	FROM
+		usgs_pad.area AS up
+	JOIN ebd.ebird e ON ST_INTERSECTS (e.geom, up.geom)
+	WHERE
+		e.common_name = $3
+		AND up."access" NOT IN ('XA', 'UK')
+		AND e.observation_date >= '2014-01-01'
+		AND date_part('month', e.observation_date)::int = $4
+	GROUP BY up.unit_nm, up.state_nm, up.geom
+	ORDER BY
+		up.geom <-> ST_SetSRID (
+			ST_POINT ($1, $2),
+			4326
+		)
+	LIMIT 10;$BODY$
+  	LANGUAGE 'sql' VOLATILE COST 100
+ 	ROWS 10
+	;
+
+	ALTER FUNCTION "ebd"."NewProc"(float8, float8, varchar, int4) OWNER TO "geog574";
+
+The Query ends up looking like this:
+
+	select ebd.near_pa_for_sp(-89.4021755,43.075816,'Sandhill Crane',5);
 
 
 ### Section 3: Results & Conclusion
