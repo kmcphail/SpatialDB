@@ -127,21 +127,21 @@ To answer our core questions, we created several example queries. Below are exam
 		ORDER BY ac.d_access, up.unit_nm;
 
 		**RESULTS**
-		protected_area					|	access_type
+		protected_area		|	access_type
 		--------------------------------------------------------------
 		Black Earth Creek Fishery Area		|	Open Access
 		Capitol Springs Centennial State Park	|	Open Access
-		Cherokee Marsh Fishery Area			|	Open Access
-		Cross Plains State Park				|	Open Access
+		Cherokee Marsh Fishery Area		|	Open Access
+		Cross Plains State Park		|	Open Access
 		Dane County Waterfowl Production Area	|	Open Access
-		Door Creek						|	Open Access
-		Dorn Creek Fishery Area				|	Open Access
+		Door Creek		|	Open Access
+		Dorn Creek Fishery Area		|	Open Access
 		...
-		Bad Fish Creek Wildlife Area		|	Restricted Access
-		Brooklyn Wildlife Area			|	Restricted Access
-		Deansville Wildlife Area		|	Restricted Access
-		Extensive Wl Habitat			|	Restricted Access
-		Goose Lake Wildlife Area		|	Restricted Access
+		Bad Fish Creek Wildlife Area 	|	Restricted Access
+		Brooklyn Wildlife Area		|	Restricted Access
+		Deansville Wildlife Area	|	Restricted Access
+		Extensive Wl Habitat		|	Restricted Access
+		Goose Lake Wildlife Area	|	Restricted Access
 		...
 
 
@@ -167,20 +167,20 @@ To answer our core questions, we created several example queries. Below are exam
 
 
 		**RESULTS**
-		common_name				|	scientific_name
-		--------------------------------------------------
-		Acadian Flycatcher		|	Empidonax virescens
-		Accipiter sp.			|	Accipiter sp.
-		Alder Flycatcher		|	Empidonax alnorum
-		American Coot			|	Fulica americana
-		American Crow			|	Corvus brachyrhynchos
-		American Goldfinch		|	Spinus tristis
-		American Kestrel		|	Falco sparverius
-		American Redstart		|	Setophaga ruticilla
+		common_name 	|	scientific_name
+		------------------------------------------------
+		Acadian Flycatcher	|	Empidonax virescens
+		Accipiter sp.		|	Accipiter sp.
+		Alder Flycatcher	|	Empidonax alnorum
+		American Coot		|	Fulica americana
+		American Crow		|	Corvus brachyrhynchos
+		American Goldfinch	|	Spinus tristis
+		American Kestrel	|	Falco sparverius
+		American Redstart	|	Setophaga ruticilla
 		...
-		Yellow-rumped Warbler		|	Setophaga coronata
-		Yellow-throated Vireo		|	Vireo flavifrons
-		Yellow Warbler			|	Setophaga petechia
+		Yellow-rumped Warbler	|	Setophaga coronata
+		Yellow-throated Vireo	|	Vireo flavifrons
+		Yellow Warbler		|	Setophaga petechia
 
 ### Section 3: Results & Conclusion
 
