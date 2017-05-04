@@ -18,36 +18,34 @@ Guidelines:
  - [X] KM
  - [X] DM
 
-In the age of online collaboration, the scientific research community at large has gained the ability to more readily share their findings with the public. Likewise, so has the general population; thus, the concept of "citizen science" has thrived.  One of our primary sources, eBird, is a prime example of an organization that utilizes data from these self-titled “citizen scientists”. The Cornell Lab of Ornithology and National Audubon Society pooled their resources in 2002, resulting into what is now “…one of the largest and fastest growing biodiversity data resources in existence.” (eBird.org).
+In the age of online collaboration, the scientific research community at large has gained the ability to readily share their findings with the public. Likewise, so has the general population; thus, the concept of citizen science has thrived. One of our primary sources, eBird, is a prime example of an organization that utilizes data from these self-titled citizen scientists. The Cornell Lab of Ornithology and National Audubon Society pooled their resources in 2002, resulting into what is now "…one of the largest and fastest growing biodiversity data resources in existence." (eBird.org).
 
-There is a considerable community of dedicated birders who use technology tools and networks of other birders to help them find opportunities to see more birds in their area or places they are visiting. However, for non-birders or novices, it can be difficult to know where to go to see a particular species or find a list of common species seen a particular area. For example, at the International Crane Foundation, where one of the authors works, it is a common question from visitors to our site or our website to ask "Where can I see Sandhill cranes near me?" Our goal with this project was to help bring together the over 274 million eBird species sightings in the United States to help people find birds.
+There is a considerable community of dedicated birders who use technology to network with fellow birders seeking opportunities to observe more birds in their home town or favorite vacation spot. However, for non-birders or novices, it can be difficult to discover where to see a particular species or find a list of common species seen a particular area. For example, at the International Crane Foundation, where one of the authors works, it is a common question from visitors to our site or website to ask "Where can I see Sandhill cranes near me?" Our goal with this project was to help bring together the over 274 million eBird species sightings in the United States to help people find birds.
     
 - [X] **Research Questions**:
  - [X] KM
  - [X] DM
 
-From the early planning stages, our primary objective has been the creation of a platform that answers variations of three questions: 
+From the early planning stages of this project, our primary objective has been to create a platform that answers variations of three questions: 
 
 - What bird species can I see nearby? 
 - Where can I see a certain species nearby? 
 - When can I see a certain species nearby? 
 
-The first question demonstrates the minimum requirement when writing a proper query statement for use in our database; a user must designate a search location. Building on this stipulation, the second and third questions allow for bird species as an additional parameter. More detailed queries may include specifying a certain month, natural area, or any combination of the aforementioned variables. This project focuses on solutions to these concerns through the design, creation, and implementation of a spatial database, along with custom functions, joins, and relationships.
+The first question demonstrates the minimum requirement when building a proper query statement for use in our database; a user must designate a search location. Building on this stipulation, the second and third questions allow for bird species as an additional parameter. More detailed queries may include specifying a certain month, natural area, or any combination of the aforementioned variables. This project focuses on solutions to these concerns through the design, creation, and implementation of a spatial database, along with custom functions, joins, and relationships.
     
-- [ ] **Data Description & Sources**:
+- [X] **Data Description & Sources**:
  - [X] KM
  - [X] DM
 
-Three main sources form our database: the eBird Basic Dataset from Cornell, the Protected Areas Database of the United States from USGS, and TIGER/Line Shapefiles from the U.S. Census Bureau. The download for the former source consists of a tab-delimited text file, imported as a table using the SQL copy command and assigned point geometry derived from longitude and latitude field values. The latter two sources were obtained as shapefiles and uploaded to our SQL database using PostGIS’ shp2pgsql and psql command line expressions. 
+Three main sources form our database: the eBird Basic Dataset from Cornell, the Protected Areas Database of the United States from USGS, and TIGER/Line Shapefiles from the U.S. Census Bureau. The download for the former source consists of a tab-delimited text file, imported using the SQL copy command and assigned point geometry derived from longitude and latitude field values. The latter two sources were obtained as shapefiles and uploaded using the PostGIS shp2pgsql and psql command line expressions. 
     
 - [ ] **Expectations & Transition to Section 2**:
  - [X] KM
  - [ ] DM
 
-Although the raw data we obtained has the potential for extensive analytical research, our database will primarily cater to the average outdoor enthusiast and thus many of the original fields proved unnecessary. Our goal in combining these resources is to develop a bird species search tool that is both comprehensive and practical at a local scale. 
+Our goal in combining these resources is to develop a bird species search tool that is both comprehensive and practical at a local scale. Although the raw data we obtained has the potential for extensive analytical research, our database will primarily cater to the average outdoor enthusiast and thus many of the original fields proved unnecessary. We encountered several challenges working with such a vast dataset of species sightings. However, we were able to resolve several of these through query experimentation and will discuss those challenges and solutions in the sections below. 
 
-We encountered several challenges working with such a vast dataset of species sightings. We were able to resolve several of these through query experimentation and will discuss those challenges and solutions in the sections below.
-    
 
 ### Section 2: Database Design, Implementation & Manipulation
 
@@ -92,13 +90,13 @@ _Figure 2. Logical diagram_
  - [ ] KM
  - [X] DM
 
-The database sections were pulled from existing (third-party) databases, namely eBird, the USGS Protected Area Database (USGS PAD), and the US Census Tiger data. In each case, we created separate schema to hold these databases. Our research questions do not require that we keep all of the attributes in each table. We eliminated attribute fields that were not useful for our question. Further, the database providers often included duplicative fields to make it easier for outside users to query by easy to read fields. For example, the USGS PAD includes both a coded value and descriptive value for a 8 fields (16 in total). In the case of the USGS PAD, we created list tables that are foreign keys and reduce the number of fields stored in the core table. We created a similar table in eBird schema to hold common and scientific names.
+The database sections were pulled from existing (third-party) databases, namely eBird, the USGS Protected Area Database (USGS PAD), and the US Census Tiger data. In each case, we created separate schema to hold these databases. Our research questions do not require that we keep all of the attributes in each table. We eliminated attribute fields that were not useful for our questions. Further, the database providers often included duplicative fields to make it easier for outside users to query by easy to read fields. For example, the USGS PAD includes both a coded value and descriptive value for a 8 fields (16 in total). In the case of the USGS PAD, we created list tables that are foreign keys and reduce the number of fields stored in the core table. We created a similar table in eBird schema to hold common and scientific names.
 
-To import the eBird data, we used an example found on the web (https://github.com/weecology/retriever/issues/90) to create properly formated table. Once completed, we uploaded the US eBird data downloaded from their website to the database. The details of this process are described in SQL in _APPENDIX 1_.
+To import the eBird data, we used an example found on the web (https://github.com/weecology/retriever/issues/90) to create properly formatted table. Once completed, we uploaded the US eBird data downloaded from their website to the database. The details of this process are described in SQL in _APPENDIX 1_.
 
-Data for the census and usgs schemas were uploaded using the SHP2PGSQL command. Once imported the USGS PAD tabe ("area") was used to create several additional list tables to eliminate 'duplicate' attributes, as described above. Please see the ER Model and Logical Diagram for details. We used the state name (census.state.name) as a foreign key in the USGS PAD table (usgs_pad.area.state_nm). There are no onter direct linkages between the tables in different schaa's - all of the other conenctions are spatial in nature.
+Data for the census and usgs_pad schemas were uploaded using the PostGIS SHP2PGSQL command. Once imported the USGS PAD table ("area") was used to create several additional list tables to eliminate 'duplicate' attributes, as described above. Please reference the ER Model (see Figure 1) and Logical Diagram (see Figure 2) for details. We used the state name (census.state.name) as a foreign key in the USGS PAD table (usgs_pad.area.state_nm). There are no longer direct linkages between the tables in different schemas; all other connections are spatial in nature.
 
-For each table, indexes were created on fields pertinet to our core queries. The list indludes:
+For each table, indexes were created on fields pertinent to our core queries. The list includes:
 
  **ebd.ebird**
  - CREATE INDEX ebird_geom_idx ON ebd.ebird USING GIST (geom);
