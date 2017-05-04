@@ -47,13 +47,13 @@ Three main sources form our database: the eBird Basic Dataset from Cornell, the 
 Our goal in combining these resources is to develop a bird species search tool that is both comprehensive and practical at a local scale. Although the raw data we obtained has the potential for extensive analytical research, our database will primarily cater to the average outdoor enthusiast and thus many of the original fields proved unnecessary. We encountered several challenges working with such a vast dataset of species sightings. However, we were able to resolve several of these through query experimentation and will discuss those challenges and solutions in the sections below. 
 
 
-### Section 2: Database Design, Implementation & Manipulation
+### Section 2: Database Design & Implementation
 
 - [ ] **Database Design**:
  - [X] KM
  - [ ] DM
 
-We translated our source data into four spatial entities (see ebird, area, state, county in Figure 1) placed in three groups, which are later expressed as schemas during the database implementation phase. The first consists of species observations depicted as points, another contains protected lands with polygon geometry, and the last group holds both states and counties represented as polygons. Given the amount of overlap in field values within each entity, minimizing redundancy via normalization became the next priority. The bulk of non-spatial entities and attributes seen in Figure 1 originate from the area entity. Attributes for some might seem obvious based on names like manager_name and manager_type (e.g. values 'SFW', 'State Fish and Wildlife' for mang_name, d_mang_nam likely relate to 'STAT', 'State' for mang_type, d_mang_typ), but others may need further explanation. The most relevant for casual users is access. Composed of four domains, this entity details the level of public access permissible:
+We translated our source data into four spatial entities (see ebird, area, state, county in Figure 1) placed in three groups, which are later expressed as schemas during the database implementation phase. The first consists of species observations depicted as points, another contains protected lands with polygon geometry, and the last group holds both states and counties represented as polygons. Given the amount of overlap in field values within each entity, minimizing redundancy via normalization became the next priority. The bulk of non-spatial entities and attributes seen in Figure 1 originate from the area entity. Attributes for some might seem obvious based on names like manager_name and manager_type (e.g. values 'SFW' & 'State Fish and Wildlife' for mang_name & d_mang_nam relate to 'STAT' & 'State' for mang_type & d_mang_typ), but others may need further explanation (see below). The most relevant for casual users is access. Composed of four domains, this entity details the level of public access permissible:
 - access
    - OA - 'Open Access'
    - RA - 'Restricted Access'
@@ -67,7 +67,6 @@ Some useful, but more niche entities derived from the area entity include:
   - NT = 'National Scenic or Historic Trail'
   - ...
   - WSR - 'Wild and Scenic River'
- 
 - gap_status
   - 1 - 'managed for biodiversity - disturbance events proceed or are mimicked'
   - 2 - 'managed for biodiversity - disturbance events surpressed'
@@ -86,15 +85,15 @@ _Figure 1. Entity-Relationship diagram_
 
 _Figure 2. Logical diagram_
 
-- [ ] **Database Implementation**:
- - [ ] KM
+- [X] **Database Implementation**:
+ - [X] KM
  - [X] DM
 
-The database sections were pulled from existing (third-party) databases, namely eBird, the USGS Protected Area Database (USGS PAD), and the US Census Tiger data. In each case, we created separate schema to hold these databases. Our research questions do not require that we keep all of the attributes in each table. We eliminated attribute fields that were not useful for our questions. Further, the database providers often included duplicative fields to make it easier for outside users to query by easy to read fields. For example, the USGS PAD includes both a coded value and descriptive value for a 8 fields (16 in total). In the case of the USGS PAD, we created list tables that are foreign keys and reduce the number of fields stored in the core table. We created a similar table in eBird schema to hold common and scientific names.
+The database sections were pulled from existing (third-party) databases, namely eBird, the USGS Protected Area Database (USGS PAD), and the US Census Tiger data. In each case, we created separate schema to hold these databases. Since our research questions do not reference the entirety of attributes in each table, we eliminated fields that were not applicable when answering our questions. Further, the database providers include duplicative fields to make it easier for outside users to read and query. For example, the USGS PAD includes both a coded value and descriptive value for a 8 fields (16 in total). In the case of this database, we reduced the number of fields and created list tables that are referenced by foreign keys in the core table. We created a similar table in eBird schema to hold common and scientific names.
 
 To import the eBird data, we used an example found on the web (https://github.com/weecology/retriever/issues/90) to create properly formatted table. Once completed, we uploaded the US eBird data downloaded from their website to the database. The details of this process are described in SQL in _APPENDIX 1_.
 
-Data for the census and usgs_pad schemas were uploaded using the PostGIS SHP2PGSQL command. Once imported the USGS PAD table ("area") was used to create several additional list tables to eliminate 'duplicate' attributes, as described above. Please reference the ER Model (see Figure 1) and Logical Diagram (see Figure 2) for details. We used the state name (census.state.name) as a foreign key in the USGS PAD table (usgs_pad.area.state_nm). There are no longer direct linkages between the tables in different schemas; all other connections are spatial in nature.
+Data for the census and usgs_pad schemas were uploaded using the PostGIS SHP2PGSQL command. Once imported the USGS PAD table ("area") was used to create several additional list tables to eliminate 'duplicate' attributes, as described above. Please reference the ER Diagram (see Figure 1) and Logical Diagram (see Figure 2) for details. We used the state name (census.state.name) as a foreign key in the USGS PAD table (usgs_pad.area.state_nm). There are no longer direct linkages between the tables in different schemas; all other connections are spatial in nature.
 
 For each table, indexes were created on fields pertinent to our core queries. The list includes:
 
@@ -122,11 +121,14 @@ For each table, indexes were created on fields pertinent to our core queries. Th
  - CREATE INDEX county_geom_idx ON census.county USING GIST (geom);
  - CREATE INDEX county_name_idx ON census.county (name);
 
-- [ ] **Database Manipulations**:
- - [ ] KM
+
+### Section 3: Database Manipulation & Results
+
+- [X] **Database Manipulations & Results**:
+ - [X] KM
  - [X] DM
 
-To answer our core questions, we created several example queries. Below are examples of the queries and results.
+To answer our research questions, we created several example queries. Below are examples of the queries and results.
 
 Find Protected Areas (without access restrictions) in a particular county that has records of a particular species.
 
@@ -168,7 +170,7 @@ Create a list of species you might expect to see in a specific protected area.
 	**QUERY**
 	-- A query to create a bird list for a protected area in a particular month
 	--	In this example, since Devil's Lake State Park has several polygons and not just one, 
-	--	I used LIKE in the WHERE clause to caputer them all
+	--	I used LIKE in the WHERE clause to capture them all
 	SELECT
 		e.common_name,
 		e.scientific_name
@@ -266,7 +268,7 @@ Find the nearest publicly accessible Protected Area where one might find a parti
 	 Wood County Forest                             | WI    | 89.32880702701
 	(10 rows)
 
-Given the complexity of the above query, we created a function that outputs the same information but allows the user to enter simpler criteria.
+Given the complexity of the above query, we created a function that outputs the same information but simplifies criteria entered by the user.
 
 	CREATE FUNCTION "ebd"."NewProc"(float8, float8, varchar, int4)
   	RETURNS SETOF "ebd"."_near_pa" AS $BODY$SELECT
@@ -297,19 +299,6 @@ Given the complexity of the above query, we created a function that outputs the 
 The Query ends up looking like this:
 
 	select ebd.near_pa_for_sp(-89.4021755,43.075816,'Sandhill Crane',5);
-
-
-### Section 3: Results & Conclusion
-
-- [ ] **Results**:
- - [ ] KM
- - [ ] DM
-
-
-- [ ] **Wrap-up/Discussion/Conclusion**:
- - [ ] KM
- - [ ] DM
-
 
 
 ### Section 4: References
